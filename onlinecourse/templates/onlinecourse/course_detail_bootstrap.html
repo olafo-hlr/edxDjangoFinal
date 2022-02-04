@@ -48,9 +48,40 @@
                         <div class="card-header"><h5>Lesson {{lesson.order|add:1}}: {{lesson.title}}</h5></div>
                         <div class="card-body">{{lesson.content}}</div>
                     </div>
+                    <!-- Task: show questions and choices -->
+                    <a class="btn btn-primary container-fluid" data-toggle="collapse" href="#exam{{lesson.order|add:1}}" role="button" aria-expanded="false" aria-controls="collapseExample">
+                                Start Exam
+                    </a>
+
+                    <div id="exam{{lesson.order|add:1}}" class="collapse">
+                        <form id="questionform" action="point to a submit view" method="post">
+                         {% for question in question_list %}
+                         {% if question.lesson_id == lesson.id %}
+                        <div class="card mt-1">
+                            <div class="card-header"><h5>{{ question.question_text}}</h5></div>
+                            {% csrf_token %}
+                            <div class="form-group">
+                               {% for choice in question.choice_set.all %}
+                                <div class="form-check">
+                                    <label class="form-check-label">
+                                        <input type="checkbox" name="choice_{{choice.id}}"
+                                               class="form-check-input" id="{{choice.id}}"
+                                               value="{{choice.id}}">{{ choice.choice_text }}
+                                    </label>
+                                </div>
+                                {% endfor %} 
+                            </div>
+                        </div>
+                        {% endif %}
+                     {% endfor %}
+                     <input class="btn btn-success btn-block" type="submit" value="Submit">
+                    </form>
+
+                    </div>
                 {% endfor %}
             </div>
-            <!-- Task: show questions and choices -->
+    </div>
+            
             <!-- <HINT> Use Bootstrap Collapse to hide exam first, more details could be found here
             https://www.w3schools.com/bootstrap4/bootstrap_collapse.asp-->
 
